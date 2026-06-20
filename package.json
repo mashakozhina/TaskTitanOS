@@ -1,0 +1,38 @@
+{
+  "name": "titanos-test-automation",
+  "version": "1.0.0",
+  "private": true,
+  "description": "TitanOS automated test suite",
+  "workspaces": ["ui-tests", "api-tests"],
+  "devDependencies": {
+    "@typescript-eslint/parser": "^8.x",
+    "eslint": "^9.x",
+    "eslint-plugin-playwright": "^2.x",
+    "husky": "^9.x",
+    "lint-staged": "^15.x",
+    "prettier": "^3.x"
+  },
+  "scripts": {
+    "prepare": "husky",
+    "test": "npm run test:ui && npm run test:api",
+    "pretest:ui": "rm -rf ui-tests/report-*",
+    "test:ui": "cd ui-tests && npm test",
+    "pretest:api": "rm -rf api-tests/jest-report-*",
+    "test:api": "cd api-tests && npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mashakozhina/TaskTitanOS.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/mashakozhina/TaskTitanOS/issues"
+  },
+  "homepage": "https://github.com/mashakozhina/TaskTitanOS#readme",
+  "engines": {
+    "node": ">=22"
+  }
+}
