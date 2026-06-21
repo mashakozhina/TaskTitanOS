@@ -13,11 +13,9 @@
     "prettier": "^3.x"
   },
   "scripts": {
-    "prepare": "husky",
-    "test": "npm run test:ui && npm run test:api",
-    "pretest:ui": "rm -rf ui-tests/report-*",
+    "prepare": "husky || true",
+    "test": "npm run test:api && npm run test:ui",
     "test:ui": "cd ui-tests && npm test",
-    "pretest:api": "rm -rf api-tests/jest-report-*",
     "test:api": "cd api-tests && npm test"
   },
   "repository": {

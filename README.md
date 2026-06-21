@@ -7,17 +7,22 @@ Automated test suite for TitanOS using Playwright (UI) and Jest (API).
 ```
 ui-tests/
   playwright.config.ts
-  pages/           # Page Object Models
-  helpers/         # Utilities (e.g., RemoteControl)
-  integration/     # Playwright test specs
-  fixtures/        # Testing data
+  pages/               # Page Object Models
+  helpers/             # Utilities (e.g., RemoteControl)
+  integration/         # Playwright test specs
+  fixtures/            # Test data
 
 api-tests/
-  jest.config.ts
-  specs/           # Jest API test specs
+  jest.config.js
+  fixtures/
+    appData.ts         # Base URL, shared params, page IDs
+  controllers/         # Request wrappers, one class per resource
+  interfaces/          # TypeScript interfaces for response types
+  helpers/
+    apiClient.ts       # Axios instance
+  specs/               # Jest test specs
 
 package.json
-.env.example
 README.md
 ```
 
@@ -25,21 +30,60 @@ README.md
 
 1. **Install dependencies**
 
+Install root dependencies:
+
 ```bash
 npm install
-npx playwright install
 ```
 
-2. **Create `.env` file** in the repository root (copy from `.env.example`):
+Install UI test dependencies and Playwright browsers:
 
 ```bash
-cp .env.example .env
+cd ui-tests && npm install && npx playwright install && cd ..
 ```
 
-Add the provided credentials:
+Install API test dependencies:
 
-API_AUTH_TOKEN=Bearer <your_token>
-BASE_URL=`<url>`
+```bash
+cd api-tests && npm install && cd ..
+```
+
+2. **Create `.env` files**
+
+For UI tests, create `ui-tests/.env` (copy from `ui-tests/.env.example`):
+
+```bash
+cp ui-tests/.env.example ui-tests/.env
+```
+
+The UI `.env` supports the following variables:
+
+```
+BASE_URL=
+TEST_APP_NAME=     # app used in favourites tests, defaults to DAZN
+TEST_CATEGORY=     # category used in search tests, defaults to Action
+```
+
+For API tests, create `api-tests/.env` (copy from `api-tests/.env.example`):
+
+```bash
+cp api-tests/.env.example api-tests/.env
+```
+
+The API `.env` supports the following variables:
+
+```
+BASE_URL=          # TitanOS API base URL
+MARKET=            # market to test against, defaults to gb
+DEVICE=            # device type, defaults to tv
+LOCALE=            # locale for responses, defaults to en
+```
+
+To run against a different market or device, update these values or pass them inline:
+
+```bash
+MARKET=us npm run test:api
+```
 
 ## Run tests
 
@@ -61,16 +105,40 @@ npm run test:ui
 npm run test:api
 ```
 
-## Test requirements
+**Run a single UI spec:**
 
-✅ **Test 1:** Delete apps from home page favourites row (long press to delete, watch-tv cannot be deleted)
-✅ **Test 2:** Add app to favourites from Apps page
-✅ **Test 3:** Open category from search page
-✅ **Test 4:** Verify channels page availability
+```bash
+cd ui-tests && npm test -- apps
+```
+
+**Run a single API spec:**
+
+```bash
+cd api-tests && npm test -- collections
+```
+
+## UI test specs
+
+| Test               | Description                                                                                                       |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| apps.spec.ts       | Add app to favourites from the Applications page                                                                  |
+| favourites.spec.ts | Remove app from the favorites at the Home page<br /><br />Not allowed to remove "watch-tv" app from the favorites |
+| channels.spec.ts   | Channels page is displayed correctly<br /><br />Channels page shows placeholder when unavailable at the region    |
+| search.spec.ts     | Open category from the search page                                                                                |
+
+## API test specs
+
+| Spec                | Endpoint                    | Description                                                        |
+| ------------------- | --------------------------- | ------------------------------------------------------------------ |
+| collections.test.ts | `GET /v1/pages/:id/items` | Home page collections — shape, pagination, 400, 404               |
+| genres.test.ts      | `GET /v1/genres`          | Genre list — required fields, contents URLs, dominant colour, 400 |
+| menu-items.test.ts  | `GET /v1/menu_items`      | Navigation menu — ordering, core items, home item contract, 400   |
 
 ## Notes
 
-- Each test suite (`ui-tests` and `api-tests`) has its own config file
-- Keep `.env` with secrets out of version control
-- Reports are generated in `ui-tests/report-*` and `api-tests/report-*` directories
-- Every test is related to specific component
+- UI tests run with `workers: 1` and `fullyParallel: false`. Tests share device state so parallel execution would cause conflicts
+- API tests use Backend for Frontend endpoints that return shaped UI data. Tests validate response contracts, not specific content values
+- Reports are generated in `ui-tests/report` and `api-tests/jest-report` after each run
+- Keep `.env` files out of version control
+- It was the issue with channels page, so I checked instead that there is placeholder there
+- I couldn't add the app to favorites, so the last step in this spec "Add app to the favourites from the Applications page" will fail
