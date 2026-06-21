@@ -15,7 +15,7 @@ test.describe("Search", () => {
     await homePage.navigateToSearch();
   });
 
-  test("Open a category from the search page", async ({ page }) => {
+  test("Open category from the search page", async ({ page }) => {
     await search.openCategory(category);
     await search.assertCategoryOpened(category);
     await search.assertCategoryPageUrl(category);

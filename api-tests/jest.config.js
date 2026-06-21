@@ -1,7 +1,5 @@
 require("dotenv/config");
 
-const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-
 /** @type {import('jest').Config} */
 const config = {
   preset: "ts-jest",
@@ -12,7 +10,7 @@ const config = {
     "default",
     [
       "jest-html-reporters",
-      { publicPath: `./jest-report-${timestamp}`, filename: "index.html" },
+      { publicPath: "./jest-report", filename: "index.html" },
     ],
   ],
 };

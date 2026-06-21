@@ -1,9 +1,9 @@
 node_modules/
 playwright-report/
-playwright-report-*/
-report-*/
+report/
 test-results/
-jest-report-*/
+jest-report/
+jest-report/attached/
 .env
 .DS_Store
 auth.json
