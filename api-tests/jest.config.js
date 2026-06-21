@@ -1,4 +1,4 @@
-require("dotenv/config");
+require("dotenv").config({ override: false });
 
 /** @type {import('jest').Config} */
 const config = {
