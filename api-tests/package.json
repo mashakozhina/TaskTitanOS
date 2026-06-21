@@ -4,7 +4,7 @@
   "private": true,
   "description": "TitanOS API test suite using Jest",
   "scripts": {
-    "test": "jest"
+    "test": "jest --runInBand"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
