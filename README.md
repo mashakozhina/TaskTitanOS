@@ -140,4 +140,5 @@ cd api-tests && npm test -- collections
 - Reports are generated in `ui-tests/report` and `api-tests/jest-report` after each run
 - It was the issue with channels page, so I checked instead that there is placeholder there
 - I couldn't add the app to favorites, so the last step in this spec "Add app to the favourites from the Applications page" will fail
--
+- I think the test can be unstable, appologize i didnt fix it before the task submittion
+- I also added GitHub action pipeline, so far just a job  for API tests is running. UI I commented so far because of this unstable test I mentioned before
