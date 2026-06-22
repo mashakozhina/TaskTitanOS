@@ -22,7 +22,7 @@ test.describe("Applications", () => {
     const appAddedtoFavorites = await apps.openAppDetails();
     await appDetails.assertAppDetailsPageElements();
     await appDetails.addAppToFavourites(); //Couldn't add the app to favirites without login
-    await homePage.navigateToHomePage();
+    await appDetails.backHomeFromAppDetails();
     //await homePage.assertAppInFavourites(appAddedtoFavorites);
   });
 });

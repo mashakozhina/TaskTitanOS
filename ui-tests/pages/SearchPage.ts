@@ -12,8 +12,11 @@ export class SearchPage extends BasePage {
     return this.page.getByTestId("search-bar");
   }
 
+  //need to add data-testid
   get searchInput() {
-    return this.page.getByTestId("search-input");
+    return this.page.getByRole("textbox", {
+      name: "Search Movies, Shows, Apps",
+    });
   }
 
   get genresGrid() {

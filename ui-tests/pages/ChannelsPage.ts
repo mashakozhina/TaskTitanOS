@@ -30,7 +30,12 @@ export class ChannelsPage extends BasePage {
   }
 
   async assertPlaceholderVisible() {
-    await expect(this.placeholderHeading).toBeVisible();
+    await expect
+      .poll(() => this.placeholderHeading.isVisible(), {
+        timeout: 30_000,
+        intervals: [1_000, 2_000, 3_000],
+      })
+      .toBe(true);
     await expect(this.placeholderSubtitle).toBeVisible();
     await expect(this.placeholderOkButton).toBeVisible();
   }

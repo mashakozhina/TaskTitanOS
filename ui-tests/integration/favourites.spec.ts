@@ -1,8 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { HomePage } from "../pages/HomePage";
 
-const appName = process.env.TEST_APP_NAME ?? "DAZN";
-
 test.describe("Favourite Apps", () => {
   let homePage: HomePage;
 
@@ -13,8 +11,8 @@ test.describe("Favourite Apps", () => {
 
   test("Remove app from the favorites at the Home page", async ({ page }) => {
     const appsBefore = await homePage.favoriteAppContainer.count();
-    await homePage.selectFavoriteApp(appName);
-    await homePage.removeAppUsingKeyboard(appName);
+    await homePage.selectFavoriteApp();
+    await homePage.removeAppUsingKeyboard();
     await expect(homePage.favoriteAppContainer).toHaveCount(appsBefore - 1);
   });
 
