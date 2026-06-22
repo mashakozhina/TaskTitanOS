@@ -75,10 +75,8 @@ export class BasePage {
 
   async getFocusedElementTestId(): Promise<string> {
     return this.page.evaluate(() => {
-      const el = document.activeElement;
-      return (
-        el?.getAttribute("data-testid") ?? el?.tagName ?? "no focused element"
-      );
+      const el = document.querySelector('[data-focused="focused"]');
+      return el?.getAttribute("data-testid") ?? "no focused element";
     });
   }
 

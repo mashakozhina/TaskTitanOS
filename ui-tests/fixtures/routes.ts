@@ -1,6 +1,6 @@
 export const ROUTES = {
   home: "/",
-  apps: "/apps",
+  apps: "/page",
   channels: "/channels",
   search: "/search",
   favourites: "/favourites",

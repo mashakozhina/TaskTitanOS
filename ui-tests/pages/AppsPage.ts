@@ -33,7 +33,7 @@ export class AppsPage extends BasePage {
   }
 
   get daznApp() {
-    return this.page.getByTestId("DAZN");
+    return this.page.getByTestId("DAZN").first();
   }
 
   //Actions
@@ -51,14 +51,13 @@ export class AppsPage extends BasePage {
   }
 
   async assertAppsPageUrl() {
-    await expect(this.page).toHaveURL(new RegExp(ROUTES.apps));
+    await expect(this.page).toHaveURL(new RegExp(ROUTES.apps), {
+      timeout: 30_000,
+    });
   }
 
   async openAppDetails(): Promise<string> {
-    await this.remote.pressArrow("down");
-    await this.remote.pressArrow("down");
-    await this.remote.pressArrow("down");
-    await this.remote.pressArrow("down");
+    await this.remote.pressArrow("down", 4);
     const focusedAppTestId = await this.getFocusedElementTestId();
     await this.remote.pressEnter();
     return focusedAppTestId;

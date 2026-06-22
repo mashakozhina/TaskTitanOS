@@ -60,7 +60,6 @@ The UI `.env` supports the following variables:
 
 ```
 BASE_URL=
-TEST_APP_NAME=     # app used in favourites tests, defaults to DAZN
 TEST_CATEGORY=     # category used in search tests, defaults to Action
 ```
 
@@ -139,6 +138,6 @@ cd api-tests && npm test -- collections
 - UI tests run with `workers: 1` and `fullyParallel: false`. Tests share device state so parallel execution would cause conflicts
 - API tests use Backend for Frontend endpoints that return shaped UI data. Tests validate response contracts, not specific content values
 - Reports are generated in `ui-tests/report` and `api-tests/jest-report` after each run
-- Keep `.env` files out of version control
 - It was the issue with channels page, so I checked instead that there is placeholder there
 - I couldn't add the app to favorites, so the last step in this spec "Add app to the favourites from the Applications page" will fail
+-

@@ -2,9 +2,11 @@ import { expect } from "@playwright/test";
 import { BasePage } from "./BasePage";
 import { ROUTES } from "../fixtures/routes";
 import { RemoteControl } from "../helpers/remoteControl";
+import { AppsPage } from "./AppsPage";
 
 export class AppDetailsPage extends BasePage {
   protected remote = new RemoteControl(this.page);
+  protected apps = new AppsPage(this.page);
 
   //Locators
 
@@ -55,6 +57,17 @@ export class AppDetailsPage extends BasePage {
   async addAppToFavourites() {
     await expect(this.addToFavouritesBtn).toBeVisible();
     await this.addToFavouritesBtn.focus();
+    await this.remote.pressEnter();
+  }
+
+  async backHomeFromAppDetails() {
+    await this.page.goBack();
+    // eslint-disable-next-line playwright/no-wait-for-timeout
+    await this.page.waitForTimeout(5_000); //this added temporary but should be removed
+    await this.apps.assertAppsPageElements();
+    await this.remote.pressArrow("up", 5);
+    await this.remote.pressEnter();
+    await this.remote.pressArrow("left", 3);
     await this.remote.pressEnter();
   }
 }

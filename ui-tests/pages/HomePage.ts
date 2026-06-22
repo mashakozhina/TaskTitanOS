@@ -56,6 +56,10 @@ export class HomePage extends BasePage {
     return this.page.getByTestId("editmode-remove-app");
   }
 
+  get watchTvRemoveBtn() {
+    return this.watchTV.getByTestId("editmode-remove-app");
+  }
+
   //Actions
 
   async navigateToHomePage() {
@@ -85,37 +89,23 @@ export class HomePage extends BasePage {
     }
   }
 
-  async selectFavoriteApp(appName: string) {
-    switch (appName) {
-      case "DAZN": {
-        await this.remote.pressArrow("right");
-        break;
-      }
-      case "Netflix": {
-        await this.remote.pressArrow("right");
-        await this.remote.pressArrow("right");
-        await this.remote.pressEnter();
-        break;
-      }
-      default: {
-        await this.remote.pressArrow("right");
-        break;
-      }
-    }
+  async selectFavoriteApp() {
+    await this.remote.pressArrow("right", 2);
   }
 
-  async removeAppUsingKeyboard(appName: string) {
+  async removeAppUsingKeyboard() {
     await this.remote.longPressEnter(); // triggers edit/delete mode
-    await this.removeAppBtn.isVisible(); // wait for the remove button to be visible
-    await this.remote.pressArrow("down"); // navigate to remove button if needed
-    await this.remote.pressEnter(); // confirm removal
-    //await this.removeAppBtn.click();
+    await this.remote.pressArrow("down", 2); // navigate to remove button if needed
+    await this.remote.pressEnter(2); // confirm removal
   }
 
   async assertCannotDeleteWatchTv() {
     await this.watchTV.hover();
     await this.remote.longPressEnter();
-    await expect(this.removeAppBtn).toHaveCount(0); //ensure delete not shown
+    await expect(this.watchTvRemoveBtn).toHaveAttribute(
+      "data-focused",
+      "disabled",
+    );
   }
 
   assertAppInFavourites(appName: string) {
@@ -124,35 +114,31 @@ export class HomePage extends BasePage {
   }
 
   async navigateToChannels() {
-    await this.remote.pressArrow("up");
-    await this.remote.pressArrow("up");
-    await this.remote.pressArrow("right");
-    await this.remote.pressArrow("right");
-    await this.remote.pressEnter();
-    await this.channels.assertChannelsPageUrl();
+    await this.remote.pressArrow("up", 2);
+    await this.remote.pressArrow("right", 2);
+    const [newPage] = await Promise.all([
+      this.page.context().waitForEvent("page"),
+      this.remote.pressEnter(),
+    ]);
+    await newPage.waitForLoadState();
+    await expect(newPage).toHaveURL(new RegExp(ROUTES.channels));
+    return newPage;
   }
 
   async navigateToSearch() {
-    await this.remote.pressArrow("up");
-    await this.remote.pressArrow("up");
+    await this.remote.pressArrow("up", 2);
     await this.remote.pressArrow("left");
     await this.remote.pressEnter();
-    //await this.search.assertSearchPageElements();
-    //await this.search.assertSearchPageUrl();
+    await this.search.assertSearchPageElements();
+    await this.search.assertSearchPageUrl();
   }
 
   async navigateToApps() {
     await this.menuItemHome.focus();
-    await this.remote.pressArrow("up");
-    await this.remote.pressArrow("up");
-    await this.remote.pressArrow("right");
-    await this.remote.pressArrow("right");
-    await this.remote.pressArrow("right");
-    await this.remote.pressArrow("right");
-    await this.remote.pressArrow("right");
-    await this.remote.pressArrow("right");
+    await this.remote.pressArrow("up", 2);
+    await this.remote.pressArrow("right", 3);
     await this.remote.pressEnter();
     await this.apps.assertAppsPageElements();
-    //await this.apps.assertAppsPageUrl();
+    await this.apps.assertAppsPageUrl();
   }
 }

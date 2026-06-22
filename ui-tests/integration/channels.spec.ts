@@ -7,9 +7,10 @@ test.describe("Channels", () => {
   let homePage: HomePage;
 
   test.beforeEach(async ({ page }) => {
-    channels = new ChannelsPage(page);
     homePage = new HomePage(page);
-    await homePage.navigateToChannels();
+    await homePage.navigateToHomePage();
+    const channelsPage = await homePage.navigateToChannels();
+    channels = new ChannelsPage(channelsPage);
   });
 
   test("Channels page shows placeholder when unavailable at the region", async ({
